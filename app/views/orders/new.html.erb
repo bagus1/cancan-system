@@ -1,0 +1,40 @@
+<h1>New Order</h1>
+
+<%= form_with model: @order, local: true, style: "max-width: 500px;" do |form| %>
+  <% if @order.errors.any? %>
+    <div style="background-color: #f8d7da; border: 1px solid #721c24; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+      <h4><%= pluralize(@order.errors.count, "error") %> prohibited this order from being saved:</h4>
+      <ul>
+        <% @order.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div style="margin-bottom: 1rem;">
+    <%= form.label :total, style: "display: block; margin-bottom: 0.5rem; font-weight: bold;" %>
+    <%= form.number_field :total, step: 0.01, min: 0, 
+        style: "width: 100%; padding: 0.5rem; border: 1px solid #ced4da; border-radius: 4px;" %>
+  </div>
+
+  <div style="margin-bottom: 1rem;">
+    <%= form.label :status, style: "display: block; margin-bottom: 0.5rem; font-weight: bold;" %>
+    <%= form.select :status, 
+        options_for_select([
+          ['Pending', 'pending'],
+          ['Processing', 'processing'],
+          ['Completed', 'completed'],
+          ['Cancelled', 'cancelled']
+        ], @order.status || 'pending'),
+        {},
+        style: "width: 100%; padding: 0.5rem; border: 1px solid #ced4da; border-radius: 4px;" %>
+  </div>
+
+  <div style="margin-top: 2rem;">
+    <%= form.submit "Create Order", 
+        style: "background-color: #007bff; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; margin-right: 1rem;" %>
+    <%= link_to "Cancel", orders_path, 
+        style: "color: #6c757d; text-decoration: none; padding: 0.5rem 1rem;" %>
+  </div>
+<% end %>

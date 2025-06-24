@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CancanSystem</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <nav class="navbar" style="background-color: #f8f9fa; padding: 1rem; border-bottom: 1px solid #dee2e6;">
+      <div class="container-fluid" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <%= link_to "CanCan Authorization Demo", root_path, style: "font-weight: bold; text-decoration: none; font-size: 1.2rem;" %>
+          <span style="margin-left: 1rem;">
+            <%= link_to "Orders", orders_path, style: "margin-right: 1rem; text-decoration: none;" %>
+            <% if current_user&.admin? %>
+              <%= link_to "Roles", admin_roles_path, style: "margin-right: 1rem; text-decoration: none;" %>
+              <%= link_to "Permissions", admin_ability_permissions_path, style: "text-decoration: none;" %>
+            <% end %>
+          </span>
+        </div>
+        <div>
+          <% if user_signed_in? %>
+            <span style="margin-right: 1rem;">
+              Hello, <%= current_user.email %> 
+              <% if current_user.roles.any? %>
+                (<%= current_user.roles.pluck(:name).join(', ') %>)
+              <% end %>
+            </span>
+            <%= link_to "Logout", destroy_user_session_path, data: { "turbo-method": :delete }, style: "text-decoration: none;" %>
+          <% else %>
+            <%= link_to "Login", new_user_session_path, style: "text-decoration: none; margin-right: 1rem;" %>
+            <%= link_to "Sign Up", new_user_registration_path, style: "text-decoration: none;" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+      <% if notice %>
+        <div class="alert alert-success" style="background-color: #d1edff; border: 1px solid #0c5460; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+          <%= notice %>
+        </div>
+      <% end %>
+      
+      <% if alert %>
+        <div class="alert alert-danger" style="background-color: #f8d7da; border: 1px solid #721c24; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+          <%= alert %>
+        </div>
+      <% end %>
+      
+      <%= yield %>
+    </div>
+  </body>
+</html>
